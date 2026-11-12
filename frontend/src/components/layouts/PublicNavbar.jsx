@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Shield, Menu, X, Search, Activity, AlertCircle, FileText, Lock, HardHat } from 'lucide-react'
+import { Shield, Menu, X, Lock, HardHat, UserPlus, LogOut, LayoutDashboard } from 'lucide-react'
+import { useAuth } from '../../context/AuthContext'
 
 export const PublicNavbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const location = useLocation()
+  const { isAuthenticated, user, role, logout } = useAuth()
 
   const navLinks = [
     { label: 'Home', path: '/' },
@@ -56,23 +58,68 @@ export const PublicNavbar = () => {
             ))}
           </nav>
 
-          {/* Login Portals */}
+          {/* Login Portals / Auth Actions */}
           <div className="hidden sm:flex items-center space-x-2">
-            <Link
-              to="/admin/login"
-              className="flex items-center space-x-1.5 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg text-xs font-medium text-slate-200 transition-colors"
-            >
-              <Lock className="w-3.5 h-3.5 text-amber-400" />
-              <span>Admin Login</span>
-            </Link>
-
-            <Link
-              to="/contractor/login"
-              className="flex items-center space-x-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-semibold shadow-sm transition-colors"
-            >
-              <HardHat className="w-3.5 h-3.5" />
-              <span>Contractor Portal</span>
-            </Link>
+            {isAuthenticated ? (
+              <div className="flex items-center space-x-2">
+                {role === 'admin' && (
+                  <Link
+                    to="/admin/dashboard"
+                    className="flex items-center space-x-1.5 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg text-xs font-medium text-slate-200 transition-colors"
+                  >
+                    <LayoutDashboard className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>Admin Dashboard</span>
+                  </Link>
+                )}
+                {role === 'contractor' && (
+                  <Link
+                    to="/contractor/dashboard"
+                    className="flex items-center space-x-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-semibold shadow-sm transition-colors"
+                  >
+                    <HardHat className="w-3.5 h-3.5" />
+                    <span>Contractor Portal</span>
+                  </Link>
+                )}
+                {role === 'citizen' && (
+                  <span className="text-xs text-slate-300 px-2 py-1 bg-slate-800 rounded-lg border border-slate-700">
+                    Citizen: <span className="text-emerald-400 font-medium">{user?.email}</span>
+                  </span>
+                )}
+                <button
+                  type="button"
+                  onClick={logout}
+                  className="flex items-center space-x-1 px-2.5 py-1.5 bg-slate-800/80 hover:bg-rose-950/40 hover:text-rose-400 text-slate-400 rounded-lg text-xs transition-colors border border-slate-700"
+                  title="Sign Out"
+                >
+                  <LogOut className="w-3.5 h-3.5" />
+                  <span>Logout</span>
+                </button>
+              </div>
+            ) : (
+              <>
+                <Link
+                  to="/register"
+                  className="flex items-center space-x-1.5 px-3 py-1.5 text-xs font-semibold text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10 rounded-lg transition-colors"
+                >
+                  <UserPlus className="w-3.5 h-3.5" />
+                  <span>Register</span>
+                </Link>
+                <Link
+                  to="/admin/login"
+                  className="flex items-center space-x-1.5 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg text-xs font-medium text-slate-200 transition-colors"
+                >
+                  <Lock className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Admin Login</span>
+                </Link>
+                <Link
+                  to="/contractor/login"
+                  className="flex items-center space-x-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-semibold shadow-sm transition-colors"
+                >
+                  <HardHat className="w-3.5 h-3.5" />
+                  <span>Contractor Portal</span>
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile hamburger */}
@@ -105,22 +152,68 @@ export const PublicNavbar = () => {
             </Link>
           ))}
           <div className="pt-3 border-t border-slate-800 flex flex-col gap-2">
-            <Link
-              to="/admin/login"
-              onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center justify-center space-x-2 px-3 py-2 bg-slate-800 rounded-lg text-xs font-medium text-slate-200"
-            >
-              <Lock className="w-3.5 h-3.5 text-amber-400" />
-              <span>Admin Portal Login</span>
-            </Link>
-            <Link
-              to="/contractor/login"
-              onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center justify-center space-x-2 px-3 py-2 bg-emerald-600 text-white rounded-lg text-xs font-semibold"
-            >
-              <HardHat className="w-3.5 h-3.5" />
-              <span>Contractor Portal Login</span>
-            </Link>
+            {isAuthenticated ? (
+              <>
+                {role === 'admin' && (
+                  <Link
+                    to="/admin/dashboard"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center justify-center space-x-2 px-3 py-2 bg-slate-800 rounded-lg text-xs font-medium text-slate-200"
+                  >
+                    <LayoutDashboard className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>Admin Dashboard</span>
+                  </Link>
+                )}
+                {role === 'contractor' && (
+                  <Link
+                    to="/contractor/dashboard"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center justify-center space-x-2 px-3 py-2 bg-emerald-600 text-white rounded-lg text-xs font-semibold"
+                  >
+                    <HardHat className="w-3.5 h-3.5" />
+                    <span>Contractor Portal</span>
+                  </Link>
+                )}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMobileMenuOpen(false)
+                    logout()
+                  }}
+                  className="flex items-center justify-center space-x-2 px-3 py-2 bg-rose-950/40 text-rose-300 border border-rose-900/40 rounded-lg text-xs font-semibold"
+                >
+                  <LogOut className="w-3.5 h-3.5" />
+                  <span>Logout</span>
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/register"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center justify-center space-x-2 px-3 py-2 bg-emerald-600/20 text-emerald-300 border border-emerald-500/30 rounded-lg text-xs font-semibold"
+                >
+                  <UserPlus className="w-3.5 h-3.5" />
+                  <span>Register New Account</span>
+                </Link>
+                <Link
+                  to="/admin/login"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center justify-center space-x-2 px-3 py-2 bg-slate-800 rounded-lg text-xs font-medium text-slate-200"
+                >
+                  <Lock className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Admin Portal Login</span>
+                </Link>
+                <Link
+                  to="/contractor/login"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center justify-center space-x-2 px-3 py-2 bg-emerald-600 text-white rounded-lg text-xs font-semibold"
+                >
+                  <HardHat className="w-3.5 h-3.5" />
+                  <span>Contractor Portal Login</span>
+                </Link>
+              </>
+            )}
           </div>
         </div>
       )}
@@ -129,4 +222,3 @@ export const PublicNavbar = () => {
 }
 
 export default PublicNavbar
-

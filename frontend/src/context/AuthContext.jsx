@@ -43,6 +43,16 @@ export const AuthProvider = ({ children }) => {
     return { ...userData, role: role || userData.role }
   }
 
+  const register = async (registrationData) => {
+    const res = await authAPI.register(registrationData)
+    const { access_token, user: userData, role } = res.data
+    localStorage.setItem('roadwatch_token', access_token)
+    localStorage.setItem('roadwatch_user', JSON.stringify(userData))
+    setToken(access_token)
+    setUser(userData)
+    return { ...userData, role: role || userData.role }
+  }
+
   const logout = () => {
     localStorage.removeItem('roadwatch_token')
     localStorage.removeItem('roadwatch_user')
@@ -66,6 +76,7 @@ export const AuthProvider = ({ children }) => {
         isAuthenticated: !!token && !!user,
         loading,
         login,
+        register,
         logout
       }}
     >

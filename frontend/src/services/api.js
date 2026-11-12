@@ -47,6 +47,7 @@ export const formatImageUrl = (path) => {
 
 export const authAPI = {
   login: (credentials) => api.post('/auth/login', credentials),
+  register: (data) => api.post('/auth/register', data),
   getMe: () => api.get('/auth/me'),
   forgotPassword: (data) => api.post('/auth/forgot-password', data),
   resetPassword: (data) => api.post('/auth/reset-password', data)

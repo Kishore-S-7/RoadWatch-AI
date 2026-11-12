@@ -5,13 +5,22 @@ from pydantic import BaseModel, EmailStr, Field
 
 class UserBase(BaseModel):
     email: EmailStr
-    role: Literal["admin", "contractor"] = "admin"
+    role: Literal["admin", "contractor", "citizen"] = "admin"
     contractor_id: Optional[str] = None
     is_active: bool = True
 
 
 class UserCreate(UserBase):
     password: str
+
+
+class UserRegisterRequest(BaseModel):
+    name: Optional[str] = None
+    email: EmailStr
+    password: str = Field(..., min_length=6)
+    role: Literal["admin", "contractor", "citizen"] = "citizen"
+    company_name: Optional[str] = None
+    phone: Optional[str] = None
 
 
 class UserInDB(UserBase):

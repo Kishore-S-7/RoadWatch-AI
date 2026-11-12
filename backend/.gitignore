@@ -1,0 +1,10 @@
+.venv/
+weights/
+*.pt
+.env
+__pycache__/
+*.pyc
+uploads/
+node_modules/
+.vscode/
+.idea/

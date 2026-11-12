@@ -72,6 +72,7 @@ function App() {
             <Route path="/submit-complaint" element={<SubmitComplaint />} />
             <Route path="/track-complaint" element={<TrackComplaint />} />
             <Route path="/login" element={<PublicLogin />} />
+            <Route path="/register" element={<PublicLogin defaultMode="register" />} />
             <Route path="/admin/login" element={<PublicLogin initialRole="admin" />} />
             <Route path="/contractor/login" element={<PublicLogin initialRole="contractor" />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />

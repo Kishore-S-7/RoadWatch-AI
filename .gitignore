@@ -1,75 +1,29 @@
-# ==============================================================================
-# RoadWatch AI - Git Ignore
-# ==============================================================================
 
-# Environment files & Secrets (never commit credentials)
-.env
-.env.local
-.env.*.local
-*.env
-!.env.example
-
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-.pytest_cache/
-.coverage
-htmlcov/
-
-# Virtual Environments
-venv/
-env/
-ENV/
+# Python environment
 .venv/
+venv/
 
-# Node & Frontend Dependencies & Builds
-node_modules/
-dist/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-.vite/
+# Python cache
+__pycache__/
+*.pyc
 
-# Uploaded Files & Temporary Media (preserve directories with .gitkeep)
-backend/uploads/originals/*
-!backend/uploads/originals/.gitkeep
-backend/uploads/annotated/*
-!backend/uploads/annotated/.gitkeep
-backend/uploads/project_images/*
-!backend/uploads/project_images/.gitkeep
-backend/uploads/complaints/*
-!backend/uploads/complaints/.gitkeep
+# Environment variables
+.env
 
-# Large AI Model Weights (downloaded or loaded on demand)
+# Uploads
+uploads/
+
+# Model weights
+weights/
 *.pt
-*.onnx
-backend/weights/*.pt
-!backend/weights/.gitkeep
 
-# Editor & OS files
-.DS_Store
-Thumbs.db
+# IDE
 .vscode/
 .idea/
-*.swp
-*.swo
 
+# Node modules & build
+node_modules/
+dist/
+frontend/dist/
+git_check.py
+commit_repo.py
