@@ -1,0 +1,1522 @@
+{
+  "info": {
+    "_postman_id": "c1f7b8a2-4d2b-4e6a-9a91-9e6b609c2a11",
+    "name": "RoadWatch AI - Complete API Collection (Admin, Contractor, Public)",
+    "description": "Comprehensive Postman Collection covering all endpoints in Section 6 of the RoadWatch AI specification: Authentication, Admin Projects, Contractors, Milestones, Detections, Verification & Alerts, Complaints, Dashboard & Reports, Contractor Portal, and Public Portal.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8000/api",
+      "type": "string"
+    },
+    {
+      "key": "adminToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "contractorToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "projectId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "contractorId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "milestoneId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "alertId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "complaintId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "complaintRef",
+      "value": "RW-2026-000101",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Authentication",
+      "item": [
+        {
+          "name": "Admin Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.access_token) {",
+                  "    pm.collectionVariables.set('adminToken', jsonData.access_token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@roadwatch.com\",\n  \"password\": \"Admin@123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Contractor Login (ABC Infra)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.access_token) {",
+                  "    pm.collectionVariables.set('contractorToken', jsonData.access_token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"abc@roadwatch.com\",\n  \"password\": \"Contractor@123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Current User (Admin / Contractor)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "me"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Forgot Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@roadwatch.com\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/forgot-password",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "forgot-password"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Reset Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"token\": \"sample-token\",\n  \"new_password\": \"NewAdminPassword@123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/reset-password",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "reset-password"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Admin - Projects",
+      "item": [
+        {
+          "name": "List All Projects",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/projects",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "projects"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Project",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Velachery Bypass Road Widening\",\n  \"road_location\": \"Velachery Main Road, KM 0-6\",\n  \"district\": \"Chennai\",\n  \"description\": \"Widening 4-lane road to 6-lane divided carriageway with pedestrian corridor.\",\n  \"estimated_cost\": 45000000.0,\n  \"contractor_id\": \"{{contractorId}}\",\n  \"start_date\": \"2026-01-15\",\n  \"expected_end_date\": \"2026-12-31\",\n  \"status\": \"ongoing\",\n  \"alert_threshold\": 10.0\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/projects",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "projects"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Project by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/projects/{{projectId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "projects",
+                "{{projectId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Project",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"Updated road scope: added stormwater drain installation.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/projects/{{projectId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "projects",
+                "{{projectId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Assign Project to Contractor",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"contractor_id\": \"{{contractorId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/projects/{{projectId}}/assign",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "projects",
+                "{{projectId}}",
+                "assign"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Upload Project Image",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": ""
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/projects/{{projectId}}/image",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "projects",
+                "{{projectId}}",
+                "image"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Monitoring Table",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/projects/monitoring/table",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "projects",
+                "monitoring",
+                "table"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Full Project Dossier",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/projects/{{projectId}}/dossier",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "projects",
+                "{{projectId}}",
+                "dossier"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Project",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/projects/{{projectId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "projects",
+                "{{projectId}}"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Admin - Contractors",
+      "item": [
+        {
+          "name": "List All Contractors",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/contractors",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "contractors"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Register New Contractor",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"contractor_name\": \"Suresh Kumar\",\n  \"company_name\": \"Apex Highway Constructors Pvt Ltd\",\n  \"email\": \"apex@roadwatch.com\",\n  \"phone\": \"+91 98765 43219\",\n  \"password\": \"Contractor@123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/contractors",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "contractors"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Contractor Details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/contractors/{{contractorId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "contractors",
+                "{{contractorId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Toggle Contractor Status (Active/Inactive)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"account_status\": \"inactive\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/contractors/{{contractorId}}/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "contractors",
+                "{{contractorId}}",
+                "status"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Projects Assigned to Contractor",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/contractors/{{contractorId}}/projects",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "contractors",
+                "{{contractorId}}",
+                "projects"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Admin - Milestones",
+      "item": [
+        {
+          "name": "List Project Milestones",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/projects/{{projectId}}/milestones",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "projects",
+                "{{projectId}}",
+                "milestones"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Milestone",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Drainage System Construction\",\n  \"weight\": 20.0,\n  \"completion\": 0.0,\n  \"description\": \"RCC side drains on both sides of carriageway\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/projects/{{projectId}}/milestones",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "projects",
+                "{{projectId}}",
+                "milestones"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Milestone (Weight & Completion)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Earthwork & Grading\",\n  \"weight\": 25.0,\n  \"completion\": 100.0\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/milestones/{{milestoneId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "milestones",
+                "{{milestoneId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Milestone",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/milestones/{{milestoneId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "milestones",
+                "{{milestoneId}}"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Admin - Detection",
+      "item": [
+        {
+          "name": "List Detections for Project",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/detections?project_id={{projectId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "detections"
+              ],
+              "query": [
+                {
+                  "key": "project_id",
+                  "value": "{{projectId}}"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Admin - Verification & Alerts",
+      "item": [
+        {
+          "name": "Trigger Project Verification",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/projects/{{projectId}}/verify",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "projects",
+                "{{projectId}}",
+                "verify"
+              ]
+            }
+          }
+        },
+        {
+          "name": "List All Verification Alerts",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/alerts",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "alerts"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Alert Details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/alerts/{{alertId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "alerts",
+                "{{alertId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Request Contractor Clarification",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"note\": \"Reported progress of 80% exceeds verified progress of 65%. Please provide geo-tagged measurement book records.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/alerts/{{alertId}}/request-clarification",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "alerts",
+                "{{alertId}}",
+                "request-clarification"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Record Physical Inspection Outcome",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"inspector_name\": \"Er. Rajesh Kumar (Divisional Engineer)\",\n  \"inspection_date\": \"2026-11-10\",\n  \"notes\": \"Physical chainage verification confirms DBM layer laid up to KM 4.2. Milestone measurements reconciled.\",\n  \"verified_progress\": 72.0,\n  \"outcome\": \"approved\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/alerts/{{alertId}}/record-inspection",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "alerts",
+                "{{alertId}}",
+                "record-inspection"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Resolve Alert",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resolution_notes\": \"Clarification reviewed and on-site physical inspection confirmed accurate road alignment and quality. Alert marked resolved.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/alerts/{{alertId}}/resolve",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "alerts",
+                "{{alertId}}",
+                "resolve"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. Admin - Complaints",
+      "item": [
+        {
+          "name": "List All Citizen Complaints",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/complaints",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "complaints"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Complaint by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/complaints/{{complaintId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "complaints",
+                "{{complaintId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Complaint Status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"in_progress\",\n  \"admin_notes\": \"Assigned road maintenance team for pothole patchwork.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/complaints/{{complaintId}}/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "complaints",
+                "{{complaintId}}",
+                "status"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "8. Admin - Dashboard & Reports",
+      "item": [
+        {
+          "name": "Get Dashboard KPIs",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/dashboard/kpis",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "dashboard",
+                "kpis"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Progress Comparison Chart Data",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/dashboard/progress-comparison",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "dashboard",
+                "progress-comparison"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Reports Summary",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/reports/summary",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "reports",
+                "summary"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Export Audit CSV",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/reports/export-csv",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "reports",
+                "export-csv"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "9. Contractor Portal",
+      "item": [
+        {
+          "name": "Contractor Dashboard",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{contractorToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/contractor/dashboard",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "contractor",
+                "dashboard"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Assigned Projects Only",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{contractorToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/contractor/projects",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "contractor",
+                "projects"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Project Details (Assigned Project)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{contractorToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/contractor/projects/{{projectId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "contractor",
+                "projects",
+                "{{projectId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Project Milestones",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{contractorToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/contractor/projects/{{projectId}}/milestones",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "contractor",
+                "projects",
+                "{{projectId}}",
+                "milestones"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Milestone Completion % (Batch)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{contractorToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"milestones\": [\n    {\n      \"id\": \"{{milestoneId}}\",\n      \"completion\": 85.0\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/contractor/projects/{{projectId}}/milestones",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "contractor",
+                "projects",
+                "{{projectId}}",
+                "milestones"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Upload Road Surface Image for YOLO Defect Detection",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{contractorToken}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": ""
+                },
+                {
+                  "key": "stage_name",
+                  "value": "Binder Course Inspection",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/contractor/projects/{{projectId}}/upload-image",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "contractor",
+                "projects",
+                "{{projectId}}",
+                "upload-image"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Contractor Detections for Project",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{contractorToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/contractor/projects/{{projectId}}/detections",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "contractor",
+                "projects",
+                "{{projectId}}",
+                "detections"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Submit Progress Report (Triggers Auto-Verification)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{contractorToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reported_progress\": 70.0,\n  \"notes\": \"Completed sub-grade compaction and aggregate base layer.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/contractor/projects/{{projectId}}/progress-report",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "contractor",
+                "projects",
+                "{{projectId}}",
+                "progress-report"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Verification Status",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{contractorToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/contractor/projects/{{projectId}}/verification-status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "contractor",
+                "projects",
+                "{{projectId}}",
+                "verification-status"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Submit Clarification to Alert",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{contractorToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"explanation\": \"The 15% discrepancy in reported progress reflects pre-cast drainage culverts manufactured off-site and delivered to yard, pending on-site installation.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/contractor/alerts/{{alertId}}/clarification",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "contractor",
+                "alerts",
+                "{{alertId}}",
+                "clarification"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "10. Public / Citizen Portal (No Auth)",
+      "item": [
+        {
+          "name": "Public List Projects (Sanitized)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/public/projects",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "public",
+                "projects"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Public Project Detail Dossier",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/public/projects/{{projectId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "public",
+                "projects",
+                "{{projectId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Public Project Progress Tracking",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/public/projects/{{projectId}}/progress",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "public",
+                "projects",
+                "{{projectId}}",
+                "progress"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Public Platform Statistics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/public/stats",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "public",
+                "stats"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Submit Citizen Complaint",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "citizen_name",
+                  "value": "Anand R",
+                  "type": "text"
+                },
+                {
+                  "key": "phone",
+                  "value": "+91 98765 12345",
+                  "type": "text"
+                },
+                {
+                  "key": "district",
+                  "value": "Chennai",
+                  "type": "text"
+                },
+                {
+                  "key": "road_location",
+                  "value": "100 Feet Road, Near Metro Station",
+                  "type": "text"
+                },
+                {
+                  "key": "description",
+                  "value": "Deep pothole near pillar 42 causing traffic slowdown and safety risk.",
+                  "type": "text"
+                },
+                {
+                  "key": "photo",
+                  "type": "file",
+                  "src": ""
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/public/complaints",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "public",
+                "complaints"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Track Citizen Complaint Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/public/complaints/{{complaintRef}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "public",
+                "complaints",
+                "{{complaintRef}}"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
